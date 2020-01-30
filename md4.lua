@@ -18,40 +18,40 @@ function md4(data)
 		
 		while pos - 1 <= #data - 64 do
 		
-			  x[1],  x[2],  x[3],  x[4]
-			, x[5],  x[6],  x[7],  x[8]
-			, x[9],  x[10], x[11], x[12]
-			, x[13], x[14], x[15], x[16]
+			  x[0],  x[1],  x[2],  x[3]
+			, x[4],  x[5],  x[6],  x[7]
+			, x[8],  x[9],  x[10], x[11]
+			, x[12], x[13], x[14], x[15]
 			= get_x:unpack(data, pos)
 
 			local aa, bb, cc, dd = a, b, c, d
 
-			for i = 1, 13, 4 do
+			for i = 0, 12, 4 do
 				a = rotate_left(a + (b & c | ~b & d) + x[i    ],  3)
 				d = rotate_left(d + (a & b | ~a & c) + x[i + 1],  7)
 				c = rotate_left(c + (d & a | ~d & b) + x[i + 2], 11)
 				b = rotate_left(b + (c & d | ~c & a) + x[i + 3], 19)
 			end
 
-			for i = 1, 4 do
+			for i = 0, 3 do
 				a = rotate_left(a + (b & c | b & d | c & d) + x[i     ] + 0x5a827999,  3)
 				d = rotate_left(d + (a & b | a & c | b & c) + x[i +  4] + 0x5a827999,  5)
 				c = rotate_left(c + (d & a | d & b | a & b) + x[i +  8] + 0x5a827999,  9)
 				b = rotate_left(b + (c & d | c & a | d & a) + x[i + 12] + 0x5a827999, 13)
 			end
 
-			for i = 1, 4 do
-				i = 2 == i and 3 or 3 == i and 2 or i
+			for i = 0, 3 do
+				i = 1 == i and 2 or 2 == i and 1 or i
 				a = rotate_left(a + (b ~ c ~ d) + x[i     ] + 0x6ed9eba1,  3)
 				d = rotate_left(d + (a ~ b ~ c) + x[i +  8] + 0x6ed9eba1,  9)
 				c = rotate_left(c + (d ~ a ~ b) + x[i +  4] + 0x6ed9eba1, 11)
 				b = rotate_left(b + (c ~ d ~ a) + x[i + 12] + 0x6ed9eba1, 15)
 			end
 
-			a = (a + aa) & mask
-			b = (b + bb) & mask
-			c = (c + cc) & mask
-			d = (d + dd) & mask
+			a = a + aa & mask
+			b = b + bb & mask
+			c = c + cc & mask
+			d = d + dd & mask
 
 			pos = pos + 64
 		end
